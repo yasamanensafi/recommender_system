@@ -7,4 +7,4 @@
 	3.1 User-based
 	3.2 Item-based
 	3.3 Model-based
-## Collaborative Filtering model using Fastai
+## Section 4) Collaborative Filtering model using Fastai
