@@ -43,7 +43,7 @@ def simple_pre(df):
     feature_names = get_feature_names(linear_feature_columns + dnn_feature_columns)
     return linear_feature_columns,dnn_feature_columns,feature_names
 
-def train_test(df):
+def train_test(linear_feature_columns,dnn_feature_columns,feature_names,df):
     # generate input data for model
     train, test = train_test_split(df, test_size=0.2)
     train_model_input = {name:train[name].values for name in feature_names}
