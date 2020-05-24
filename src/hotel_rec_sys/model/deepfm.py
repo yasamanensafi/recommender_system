@@ -7,13 +7,16 @@ from sklearn import metrics
 from sklearn.metrics import mean_squared_error,mean_absolute_error
 import numpy as np
 import math
+from config import config
 
 target = ['rating']
 
 def deepfm_model(linear_feature_columns,dnn_feature_columns,train_model_input,train,test_model_input,test):
-    model = DeepFM(linear_feature_columns, dnn_feature_columns, dnn_hidden_units=(128,128)
-            , init_std=0.0001, seed=1024, dnn_dropout=0.9, dnn_activation='relu',task='binary',
-               fm_group=['default_group'],dnn_use_bn=False)
+    model = DeepFM(linear_feature_columns, dnn_feature_columns, dnn_hidden_units= config.deepfm_att["dnn_hidden_units"]
+            , init_std=config.deepfm_att["init_std"], seed=config.deepfm_att["seed"],
+             dnn_dropout=config.deepfm_att["dnn_dropout"], dnn_activation=config.deepfm_att["dnn_activation"],
+             task=config.deepfm_att["task"],fm_group=config.deepfm_att["fm_group"],
+             dnn_use_bn=config.deepfm_att["dnn_use_bn"])
 
     model.compile("adam", "mse", metrics=['mse'])
 
