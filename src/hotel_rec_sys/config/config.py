@@ -1,13 +1,44 @@
-# categ_sparse / conti_dense
-sparse_features = ["site_name","posa_continent","user_location_country","user_id",
-"is_mobile","is_package","channel","srch_adults_cnt","srch_children_cnt","srch_rm_cnt",
-"srch_destination_id","srch_destination_type_id","cnt","hotel_continent","hotel_country",
-"item_id","click_week","click_month","checkin_month","checkout_month","checkin_year",
-"checkout_year","north_am_ci","north_am_co","kmeans_user_location_region","kmeans_user_location_city",
-'couple_with_no_children','couple_with_one_child','couple_with_two_children',"empty_room","friends",
-"single","single_parent",'d33', 'd64', 'd52', 'd120', 'd72', 'd136', 'd7', 'd59', 'd50', 'd30']
+cluster = {"user_region_n_cluster" : 3,
+            "user_city_n_cluster": 3 }
 
-dense_features = ['hotel_market','log_orig_destination_distance']
+
+# categ_sparse / conti_dense
+
+target = ['rating']
+
+sparse_features = ["site_name", #ID of the Expedia point of sale (i.e. Expedia.com, Expedia.co.uk, Expedia.co.jp, …)
+"posa_continent", #ID of continent associated with site_name
+"user_location_country", #The ID of the country the customer is located
+"kmeans_user_location_region", #The ID of the region the customer is located clustered in 2 groups
+"kmeans_user_location_city", #The ID of the city the customer is located clustered in 2 groups
+"user_id", #ID of user
+"is_mobile", #1 when a user connected from a mobile device, 0 otherwise
+"is_package", #1 if the click/booking was generated as a part of a package (i.e. combined with a flight), 0 otherwise
+"channel", #ID of a marketing channel
+"cnt", #Numer of similar events in the context of the same user session
+"srch_destination_id", #ID of the destination where the hotel search was performed'
+"srch_destination_type_id", #Type of destination
+"hotel_continent", #'Hotel continent',
+"hotel_country", #Hotel country
+"item_id", #(hotel_cluster)ID of a hotel cluster
+"north_am_ci", # 1 if check-in date it's a holiday in north America
+"north_am_co",# 1 if check-out date it's a holiday in north America
+'hotel_market', #Hotel market
+'couple_with_no_children','couple_with_one_child','couple_with_two_children',"friends","single","single_parent",
+#hotel search latent attributes highly correlated with rating:
+'d33', 'd64','d52','d120', 'd72', 'd136', 'd7', 'd59', 'd50', 'd30'] 
+
+
+dense_features = ["srch_adults_cnt", #The number of adults specified in the hotel room
+"srch_children_cnt", #The number of (extra occupancy) children specified in the hotel room
+"srch_rm_cnt", #The number of hotel rooms specified in the search
+'log_orig_destination_distance', # Log transformed physical distance between a hotel and a customer at the time of search
+"click_week",
+"click_month",
+"checkin_month",
+"checkout_month",
+"checkin_year",
+"checkout_year"]
 
 # wide and deep
 widendeep_att =  {

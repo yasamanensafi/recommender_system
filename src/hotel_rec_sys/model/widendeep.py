@@ -8,7 +8,8 @@ from sklearn.metrics import mean_squared_error,mean_absolute_error
 import numpy as np
 import math
 from config import config
-target = ['rating']
+
+target = config.target
 
 def widendeep_model(linear_feature_columns,dnn_feature_columns,train_model_input,train,test_model_input,test):
     model = WDL(linear_feature_columns, dnn_feature_columns, dnn_hidden_units=config.widendeep_att["dnn_hidden_units"], 

@@ -17,13 +17,17 @@ warnings.filterwarnings("ignore")
 #load data and choose number of rows
 df = load.load_data(150000)
 
+#Remove rows with the same user_id and item_id and different rating
+df = load.remove_duplicate(df)
+
 # Apply feature engineering
 df = feature_engineering.extract_week(df,'date_time','click_week')
 df = feature_engineering.extract_month_year(df)
 df = feature_engineering.add_holiday(df)
 df = feature_engineering.log_transform(df,'orig_destination_distance')
-df = feature_engineering.create_cluster(df,'user_location_region',2)
-df = feature_engineering.create_cluster(df,'user_location_city',2)
+#df = feature_engineering.z_score_normalizing(df,'cnt')
+df = feature_engineering.create_cluster(df,'user_location_region',config.cluster["user_region_n_cluster"])
+df = feature_engineering.create_cluster(df,'user_location_city',config.cluster["user_city_n_cluster"])
 df = feature_engineering.extract_family_status(df)
 
 linear_feature_columns,dnn_feature_columns,feature_names = sparse_featuring.simple_pre(df)

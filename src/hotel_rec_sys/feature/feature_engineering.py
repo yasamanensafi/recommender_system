@@ -3,11 +3,12 @@ import numpy as np
 import pandas as pd
 import datetime
 from sklearn.cluster import KMeans
+import config
 
 def extract_week(df,feature,week):
     df[feature] =  pd.to_datetime(df[feature], infer_datetime_format=True)
     df[feature] = df.date_time.dt.strftime('%Y-%m-%d')
-    d = datetime.timedelta(days=14)
+    d = datetime.timedelta(days= 14)
     df['lag_date_time'] = df[feature].apply(lambda x: datetime.datetime.strptime(x,"%Y-%m-%d") + d)
     df['week'] = pd.DatetimeIndex(df['lag_date_time']).week
     df['year']=pd.DatetimeIndex(df['lag_date_time']).year
@@ -49,6 +50,10 @@ def log_transform(df,feature):
     df= df.drop([feature],axis=1)
     return df
 
+def z_score_normalizing(df,feature):
+    df[feature] = (df[feature] - df[feature].mean())/df[feature].std()
+    return df
+    
 def create_cluster(df,feature,n_clusters):
     y = df[feature]
     X = df.drop(feature,axis=1)
@@ -83,5 +88,8 @@ def extract_family_status(df):
     #Convert the family_status into dummy variables
     dummies = pd.get_dummies(df['family_status'],drop_first=True)
     df= pd.concat( [df.drop('family_status',axis=1),dummies],axis=1)
-    df= df.drop("unsupervised_children",axis=1)
+    if "unsupervised_children" in df.columns:
+        df= df.drop("unsupervised_children",axis=1)
+    if "empty_room" in df.columns:
+        df= df.drop("empty_room",axis=1)
     return df

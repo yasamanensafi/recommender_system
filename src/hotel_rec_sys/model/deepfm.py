@@ -9,7 +9,7 @@ import numpy as np
 import math
 from config import config
 
-target = ['rating']
+target = config.target
 
 def deepfm_model(linear_feature_columns,dnn_feature_columns,train_model_input,train,test_model_input,test):
     model = DeepFM(linear_feature_columns, dnn_feature_columns, dnn_hidden_units= config.deepfm_att["dnn_hidden_units"]
