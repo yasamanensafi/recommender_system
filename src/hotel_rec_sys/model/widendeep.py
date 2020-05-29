@@ -9,7 +9,7 @@ import numpy as np
 import pandas as pd
 import math
 from config import config
-
+from tensorflow.python.keras.models import  save_model,load_model
 
 
 target = config.target
@@ -29,7 +29,7 @@ def widendeep_model(linear_feature_columns,dnn_feature_columns,train_model_input
     
     
     pred_ans = model.predict(test_model_input, batch_size=256)
-    
+    save_model(model, 'widendeep_saved.h5')# save_model
     auc = roc_auc_score(test[target].values, pred_ans)
     
     df_result.loc[0].model = "Wide and Deep"

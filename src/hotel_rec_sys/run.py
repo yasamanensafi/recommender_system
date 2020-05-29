@@ -16,6 +16,7 @@ import hyper_parameter_tuning
 import config
 import score
 warnings.filterwarnings("ignore")
+from deepctr.layers import custom_objects
 
 #load data and choose number of rows
 df = load.load_data(150000)
@@ -57,6 +58,7 @@ xdeepfm_result= xdeepfm.xdeepfm_model(linear_feature_columns,dnn_feature_columns
 
 score.score(widendeep_result,deepfm_result,xdeepfm_result)
 
-    
+#model = load_model('xdeepfm_saved.h5',custom_objects)# load_model,just add a parameter
+print("The models are saved and ready to use")   
     
 

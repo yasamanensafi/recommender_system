@@ -9,6 +9,7 @@ import numpy as np
 import pandas as pd
 import math
 from config import config
+from tensorflow.python.keras.models import  save_model,load_model
 
 target = config.target
 
@@ -27,6 +28,7 @@ def deepfm_model(linear_feature_columns,dnn_feature_columns,train_model_input,tr
                             batch_size=256, epochs=config.model_epoch['epoch'], verbose=2, validation_split=0.2)
     
     pred_ans = model.predict(test_model_input, batch_size=256)
+    save_model(model, 'deepfm_saved.h5')# save_model
     auc = roc_auc_score(test[target].values, pred_ans)
     
     df_result.loc[0].model = "DeepFM"
