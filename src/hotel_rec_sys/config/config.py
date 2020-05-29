@@ -1,5 +1,20 @@
-cluster = {"user_region_n_cluster" : 3,
-            "user_city_n_cluster": 3 }
+import numpy as np
+import pandas as pd
+
+
+
+#huyper-parameter tuning
+
+param_rand = {'dnn_hidden_units' : [(1,1),(2,2),(4,4),(32,32),(128,128),(256,256)],
+              'l2_reg_linear':[1e-5,1e-3,1e-1,1,10],
+              'l2_reg_embedding':[1e-7,1e-5,1e-3,1e-1,1],
+              'l2_reg_dnn':[0,0.2,2,4],
+              'dnn_dropout':np.arange(0,1,0.2)
+             }
+
+model_epoch = {"epoch":10}
+
+cluster = {"user_region_n_cluster" : 3,"user_city_n_cluster": 3 }
 
 
 # categ_sparse / conti_dense
@@ -54,7 +69,7 @@ widendeep_att =  {
 deepfm_att= {"dnn_hidden_units":(128,128),
             "init_std":0.0001,
             "seed":1024,
-            "dnn_dropout":0.9,
+            "dnn_dropout":0.5,
             "dnn_activation":'relu',
             "task":'binary',
             "fm_group":['default_group'],
