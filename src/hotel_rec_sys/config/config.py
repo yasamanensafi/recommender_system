@@ -1,21 +1,22 @@
 import numpy as np
 import pandas as pd
 
+model_epoch = {"epoch":2}
 
-
-#huyper-parameter tuning
+#hyper-parameter tuning
 
 param_rand = {'dnn_hidden_units' : [(1,1),(2,2),(4,4),(32,32),(128,128),(256,256)],
               'l2_reg_linear':[1e-5,1e-3,1e-1,1,10],
               'l2_reg_embedding':[1e-7,1e-5,1e-3,1e-1,1],
               'l2_reg_dnn':[0,0.2,2,4],
-              'dnn_dropout':np.arange(0,1,0.2)
+              'dnn_dropout':[0,0.2,0.4,0.5,0.6,0.8]
              }
-
-model_epoch = {"epoch":10}
 
 cluster = {"user_region_n_cluster" : 3,"user_city_n_cluster": 3 }
 
+#Scale
+
+scaling = {'min_new':0.1, 'max_new':1.5}
 
 # categ_sparse / conti_dense
 
@@ -58,13 +59,16 @@ dense_features = ["srch_adults_cnt", #The number of adults specified in the hote
 # wide and deep
 widendeep_att =  {
     "dnn_hidden_units":(2,2),
-    "l2_reg_linear":0.1,
-    "l2_reg_embedding":0.001,
-    "l2_reg_dnn":0,
+    #"l2_reg_linear":0.1, 
+    #"l2_reg_embedding":0.001, 
+    #"l2_reg_dnn":4,
     "init_std":0.0001,
     "seed":1024,
-    "task":'binary'
+    "task":'binary',
+    "dnn_dropout": 0.4,
+    "dnn_activation":'relu'
 }
+                     
 
 deepfm_att= {"dnn_hidden_units":(128,128),
             "init_std":0.0001,

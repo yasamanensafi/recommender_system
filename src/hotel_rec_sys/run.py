@@ -2,6 +2,7 @@ import sys
 sys.path.append('../hotel_rec_sys/feature/')
 sys.path.append('../hotel_rec_sys/model/')
 sys.path.append('../hotel_rec_sys/config/')
+sys.path.append('../hotel_rec_sys/utilities/')
 
 import pickle
 import load
@@ -12,11 +13,11 @@ import deepfm
 import xdeepfm
 import traintest
 import warnings
-import hyper_parameter_tuning
 import config
 import score
 warnings.filterwarnings("ignore")
 from deepctr.layers import custom_objects
+from utilities import util
 
 #load data and choose number of rows
 df = load.load_data(150000)
@@ -39,26 +40,18 @@ linear_feature_columns,dnn_feature_columns,feature_names = sparse_featuring.simp
 
 train,test,train_model_input,test_model_input = traintest.train_test(linear_feature_columns,dnn_feature_columns,feature_names,df)
 
-    #___ hyper parameter tuning 
-    #best_dnn_hidden_units = hyper_parameter_tuning.find_dnn_hidden_units(linear_feature_columns,dnn_feature_columns,train_model_input,train,test_model_input,test)
-    #best_l2_reg_linear = hyper_parameter_tuning.find_l2_reg_linear(linear_feature_columns,dnn_feature_columns,train_model_input,train,test_model_input,test,best_dnn_hidden_units)
-    #best_l2_reg_dnn= hyper_parameter_tuning.find_l2_reg_dnn(linear_feature_columns, dnn_feature_columns, train_model_input, train, test_model_input, test, best_dnn_hidden_units, best_l2_reg_linear)
-    #result 
-
-
-
 # wide and deep
 widendeep_result= widendeep.widendeep_model(linear_feature_columns,dnn_feature_columns,train_model_input,train,test_model_input,test)
-
+print(widendeep_result)
 #DeepFM
-deepfm_result = deepfm.deepfm_model(linear_feature_columns,dnn_feature_columns,train_model_input,train,test_model_input,test)
+#deepfm_result = deepfm.deepfm_model(linear_feature_columns,dnn_feature_columns,train_model_input,train,test_model_input,test)
 
 #XDeepFM
-xdeepfm_result= xdeepfm.xdeepfm_model(linear_feature_columns,dnn_feature_columns,train_model_input,train,test_model_input,test)
+#xdeepfm_result= xdeepfm.xdeepfm_model(linear_feature_columns,dnn_feature_columns,train_model_input,train,test_model_input,test)
 
-score.score(widendeep_result,deepfm_result,xdeepfm_result)
+#score.score(widendeep_result,deepfm_result,xdeepfm_result)
 
-#model = load_model('xdeepfm_saved.h5',custom_objects)# load_model,just add a parameter
-print("The models are saved and ready to use")   
+
+#print("The models are saved and ready to use")   
     
 
