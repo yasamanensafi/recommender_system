@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-model_epoch = {"epoch":8}
+model_epoch = {"epoch":2}
 
 #hyper-parameter tuning
 

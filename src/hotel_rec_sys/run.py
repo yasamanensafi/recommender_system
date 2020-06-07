@@ -15,7 +15,6 @@ import traintest
 import warnings
 import config
 import score
-import numpy as np
 warnings.filterwarnings("ignore")
 from deepctr.layers import custom_objects
 from utilities import util
@@ -43,21 +42,16 @@ train,test,train_model_input,test_model_input = traintest.train_test(linear_feat
 
 # wide and deep
 widendeep_result= widendeep.widendeep_model(linear_feature_columns,dnn_feature_columns,train_model_input,train,test_model_input,test)
-
-
+print(widendeep_result)
 #DeepFM
-deepfm_result = deepfm.deepfm_model(linear_feature_columns,dnn_feature_columns,train_model_input,train,test_model_input,test)
+#deepfm_result = deepfm.deepfm_model(linear_feature_columns,dnn_feature_columns,train_model_input,train,test_model_input,test)
 
 #XDeepFM
-xdeepfm_result= xdeepfm.xdeepfm_model(linear_feature_columns,dnn_feature_columns,train_model_input,train,test_model_input,test)
+#xdeepfm_result= xdeepfm.xdeepfm_model(linear_feature_columns,dnn_feature_columns,train_model_input,train,test_model_input,test)
 
 #score.score(widendeep_result,deepfm_result,xdeepfm_result)
-result = widendeep_result.append([deepfm_result, xdeepfm_result])
-a=util.custom_scale(1/result['RMSE'])
-b=util.custom_scale(1/result['MAE'])
-c=util.custom_scale(result['AUC'])
-result['score']=np.round(a+b+(2*c),2)
-print(result)
-print("The model is",result[result['score']==result['score'].max()]['model'].values,"and it's saved and ready to use")   
+
+
+#print("The models are saved and ready to use")   
     
 
