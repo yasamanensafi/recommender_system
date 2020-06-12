@@ -33,7 +33,7 @@ def widendeep_model(linear_feature_columns,dnn_feature_columns,train_model_input
     
     
     pred_ans = model.predict(test_model_input, batch_size=256)
-    #save_model(model, 'widendeep_saved.h5')# save_model
+    save_model(model, 'saved_widendeep.h5')# save_model
     auc = roc_auc_score(test[target].values, pred_ans)
     
     df_result.loc[0].model = "Wide and Deep"
@@ -41,5 +41,6 @@ def widendeep_model(linear_feature_columns,dnn_feature_columns,train_model_input
     df_result.loc[0].MAE = np.round(mean_absolute_error(test[target].values, pred_ans),3)
     df_result.loc[0].MSE = np.round(mean_squared_error(test[target].values, pred_ans),3)
     df_result.loc[0].AUC = np.round(auc,3)
+
     return df_result
     

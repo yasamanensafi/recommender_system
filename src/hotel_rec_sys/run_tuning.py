@@ -47,30 +47,30 @@ dhu= tuning.find_best_dnn_hidden_units(df_result1)
 #print(df_result1)
 
 # 2)l2_reg_linear tuning
-df_result2= tuning.find_l2_reg_linear(linear_feature_columns,dnn_feature_columns,train_model_input,train,test_model_input,test)
-l2rl = df_result2.sort_values(['AUC','MAE','RMSE'],ascending=False).iloc[0]["l2_reg_linear"]
+#df_result2= tuning.find_l2_reg_linear(linear_feature_columns,dnn_feature_columns,train_model_input,train,test_model_input,test)
+#l2rl = df_result2.sort_values(['AUC','MAE','RMSE'],ascending=False).iloc[0]["l2_reg_linear"]
 #print(df_result2)
 
 #3) l2_reg_embedding
-df_result3= tuning.find_l2_reg_embedding(linear_feature_columns,dnn_feature_columns,train_model_input,train,test_model_input,test)
-l2re = df_result3.sort_values(['AUC','MAE','RMSE'],ascending=False).iloc[0]["l2_reg_embedding"]
+#df_result3= tuning.find_l2_reg_embedding(linear_feature_columns,dnn_feature_columns,train_model_input,train,test_model_input,test)
+#l2re = df_result3.sort_values(['AUC','MAE','RMSE'],ascending=False).iloc[0]["l2_reg_embedding"]
 #print(df_result3)
 
 #4) l2_reg_dnn
-df_result4= tuning.find_l2_reg_dnn(linear_feature_columns, dnn_feature_columns, train_model_input, train, test_model_input, test)
-l2rd = df_result4.sort_values(['AUC','MAE','RMSE'],ascending=False).iloc[0]["l2_reg_dnn"]
+#df_result4= tuning.find_l2_reg_dnn(linear_feature_columns, dnn_feature_columns, train_model_input, train, test_model_input, test)
+#l2rd = df_result4.sort_values(['AUC','MAE','RMSE'],ascending=False).iloc[0]["l2_reg_dnn"]
 #print(df_result4)
 
 #5) But overall, the result of model without defining the dnn_dropout is better
-df_result5= tuning.find_dnn_dropout(linear_feature_columns,dnn_feature_columns,train_model_input,train,test_model_input,test)
+#df_result5= tuning.find_dnn_dropout(linear_feature_columns,dnn_feature_columns,train_model_input,train,test_model_input,test)
 dd = df_result5.sort_values(['AUC','MAE','RMSE'],ascending=False).iloc[0]["dnn_dropout"]
 #print(df_result5)
 
 print("The best dnn_hidden_units is(",dhu,",",dhu,")")
-print("The best l2_reg_linear is",l2rl)
-print("The best l2_reg_embedding is",l2re)
-print("The best l2_reg_dnn is",l2rd)
-print("The best dnn_dropout is",dd)
+#print("The best l2_reg_linear is",l2rl)
+#print("The best l2_reg_embedding is",l2re)
+#print("The best l2_reg_dnn is",l2rd)
+##print("The best dnn_dropout is",dd)
 
 # ------- OUTPUT with 10 epochs----------
 #The best dnn_hidden_units is( 2 , 2 )

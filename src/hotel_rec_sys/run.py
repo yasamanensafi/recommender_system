@@ -18,6 +18,8 @@ import score
 warnings.filterwarnings("ignore")
 from deepctr.layers import custom_objects
 from utilities import util
+from tensorflow.python.keras.models import load_model
+from deepctr.layers import custom_objects
 
 #load data and choose number of rows
 df = load.load_data(150000)
@@ -42,16 +44,23 @@ train,test,train_model_input,test_model_input = traintest.train_test(linear_feat
 
 # wide and deep
 widendeep_result= widendeep.widendeep_model(linear_feature_columns,dnn_feature_columns,train_model_input,train,test_model_input,test)
-print(widendeep_result)
+
 #DeepFM
-#deepfm_result = deepfm.deepfm_model(linear_feature_columns,dnn_feature_columns,train_model_input,train,test_model_input,test)
+deepfm_result = deepfm.deepfm_model(linear_feature_columns,dnn_feature_columns,train_model_input,train,test_model_input,test)
 
 #XDeepFM
-#xdeepfm_result= xdeepfm.xdeepfm_model(linear_feature_columns,dnn_feature_columns,train_model_input,train,test_model_input,test)
+xdeepfm_result= xdeepfm.xdeepfm_model(linear_feature_columns,dnn_feature_columns,train_model_input,train,test_model_input,test)
+xdeepfm_result = util.apply_custom_scale(xdeepfm_result)
+warnings.filterwarnings("ignore")
+best_model = util.choose_model(widendeep_result,deepfm_result,xdeepfm_result).values
+print("The models are saved and ready to use")   
+if best_model=="Wide and Deep":
+    model = load_model('saved_widendeep.h5',custom_objects)# load_model,just add a parameter 
+elif best_model=="DeepFM":
+    model = load_model('saved_deepfm.h5',custom_objects)
+elif best_model=="XDeepFM":
+    model = load_model('saved_xdeepfm.h5',custom_objects)
 
-#score.score(widendeep_result,deepfm_result,xdeepfm_result)
-
-
-#print("The models are saved and ready to use")   
-    
+new_df= score.score(model,test_model_input,test)
+hotel_df = score.create_hotel_df()
 

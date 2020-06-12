@@ -29,7 +29,7 @@ def xdeepfm_model(linear_feature_columns,dnn_feature_columns,train_model_input,t
                             batch_size=256, epochs=config.model_epoch['epoch'], verbose=2, validation_split=0.2)
     
     pred_ans = model.predict(test_model_input, batch_size=256)
-    save_model(model, 'xdeepfm_saved.h5')# save_model
+    save_model(model, 'saved_xdeepfm.h5')# save_model
     auc = roc_auc_score(test[target].values, pred_ans)
     
     df_result.loc[0].model = "XDeepFM"
@@ -37,5 +37,5 @@ def xdeepfm_model(linear_feature_columns,dnn_feature_columns,train_model_input,t
     df_result.loc[0].MAE = np.round(mean_absolute_error(test[target].values, pred_ans),3)
     df_result.loc[0].MSE = np.round(mean_squared_error(test[target].values, pred_ans),3)
     df_result.loc[0].AUC = np.round(auc,3)    
-    df_result.loc[0].score=(1/df_result.iloc[0]['RMSE'])*(1/df_result.iloc[0]['MAE'])*(2*df_result.iloc[0]['AUC'])
+    #df_result.loc[0].score=(1/df_result.iloc[0]['RMSE'])*(1/df_result.iloc[0]['MAE'])*(2*df_result.iloc[0]['AUC'])
     return df_result
