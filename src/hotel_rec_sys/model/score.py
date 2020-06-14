@@ -9,6 +9,7 @@ import scipy.sparse as sparse
 from scipy.sparse import csr_matrix
 from scipy.sparse import coo_matrix
 import implicit
+from utilities import util
 
 def score(model,test_model_input,test):
     pred_ans = model.predict(test_model_input, batch_size=256)
@@ -38,10 +39,44 @@ def create_hotel_df():
     for i in cluster.keys():
         hotel_df['hotel_type'][cluster[i]]= i
     hotel_df = hotel_df.dropna().reset_index().drop('index',axis=1)
-    return hotel_df
+    return hotel_df,cluster
 
-def find_similar_clusters(item_id,n_similar):
-    similar = model.similar_items(item_id,n_similar)
-    return similar
+def als_model(new_df):
+    #csr_matrix((data, (row, col))
+    sparse_item_user = sparse.csr_matrix((new_df['rating'].astype(float),(new_df['item_id'], new_df['user_id'])))
+    sparse_user_item = sparse.csr_matrix((new_df['rating'].astype(float),(new_df['user_id'], new_df['item_id'])))
+    model = implicit.als.AlternatingLeastSquares(factors=20,regularization=0.1,iterations=20)
+    alpha_val = 15
+    data_conf = (sparse_item_user * alpha_val).astype('double')
+    model.fit(data_conf)
+    return model
 
-hotel_df = create_hotel_df()
+def create_csv_df(hotel_df,new_df,cluster,als_model):
+    csv_df = pd.DataFrame(columns= ['item_id','sim1','sim2','sim3'],
+                      index=range(len(hotel_df['item_id'].unique())))
+
+    #find 25 similar clusters for each item_id in hotel_df
+    for i,x in enumerate(hotel_df['item_id'].unique()):
+        similar = als_model.similar_items(x,25)
+        a=similar
+        #a= find_similar_clusters(x,25,new_df,als_model)
+        #store them in a dataframe
+        tt = pd.DataFrame(a, columns =['item_id', 'Score'])
+        # keep only clusters that have different type with the current cluster
+        for j in range(len(tt)):
+            if tt['item_id'][j] in cluster[hotel_df['hotel_type'][i]]:
+                tt=tt.drop([j])
+        bb = tt.copy()
+        # keep the top 5
+        bb=bb.reset_index(drop=True)
+        # keep only clusters that are available in hotel_df
+        for k in range(len(bb)):
+            if bb['item_id'][k] not in hotel_df['item_id']:
+                bb=bb.drop([k])
+        cc = bb.copy()
+        cc= cc.reset_index(drop=True)
+        csv_df["item_id"][i]=x
+        csv_df["sim1"][i]=cc['item_id'][0]
+        csv_df["sim2"][i]=cc['item_id'][1]
+        csv_df["sim3"][i]=cc['item_id'][2]
+    return csv_df

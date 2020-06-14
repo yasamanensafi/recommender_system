@@ -14,10 +14,6 @@ def custom_scale(array):
         result.append((max_new - min_new)/(max_old-min_old) * (v - max_old) + max_new)
     return np.array(result)
 
-def apply_custom_scale(df_result):
-
-    return df_result
-
 def choose_model(df1,df2,df3):
     result = df1.append([df2, df3])
     result=result.reset_index().drop('index',axis=1)

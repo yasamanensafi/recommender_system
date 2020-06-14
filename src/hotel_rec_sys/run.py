@@ -50,10 +50,13 @@ deepfm_result = deepfm.deepfm_model(linear_feature_columns,dnn_feature_columns,t
 
 #XDeepFM
 xdeepfm_result= xdeepfm.xdeepfm_model(linear_feature_columns,dnn_feature_columns,train_model_input,train,test_model_input,test)
-xdeepfm_result = util.apply_custom_scale(xdeepfm_result)
+
 warnings.filterwarnings("ignore")
+#choose the best model
 best_model = util.choose_model(widendeep_result,deepfm_result,xdeepfm_result).values
 print("The models are saved and ready to use")   
+
+#load the best model
 if best_model=="Wide and Deep":
     model = load_model('saved_widendeep.h5',custom_objects)# load_model,just add a parameter 
 elif best_model=="DeepFM":
@@ -61,6 +64,12 @@ elif best_model=="DeepFM":
 elif best_model=="XDeepFM":
     model = load_model('saved_xdeepfm.h5',custom_objects)
 
+# score
 new_df= score.score(model,test_model_input,test)
-hotel_df = score.create_hotel_df()
+hotel_df,cluster = score.create_hotel_df()
+als_model = score.als_model(new_df)
+csv_df = score.create_csv_df(hotel_df, new_df, cluster,als_model)
 
+#save the output including item_id (hotel cluster) and its 3 similar clusters
+csv_df.to_csv("output.csv", encoding='utf-8', index=False)
+print("output.csv is now saved")

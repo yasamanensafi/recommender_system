@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-model_epoch = {"epoch":2}
+model_epoch = {"epoch":10}
 
 #hyper-parameter tuning
 
@@ -90,9 +90,3 @@ xdeepfm_att= {"dnn_hidden_units":(256, 256),
                 "dnn_activation":'relu',
                 "task":'binary',
                 "dnn_use_bn":False}
- 
-
-                
-    
-
-
