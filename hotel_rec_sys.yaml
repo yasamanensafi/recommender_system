@@ -1,0 +1,25 @@
+# 
+display-name "Python (hotel_rec_sys)"
+# 
+name: hotel_rec_sys
+channels:
+- defaults
+
+dependencies:
+- python==3.6.10
+- numpy>=1.17.2
+- pandas>=1.0.4
+- matplotlib>=2.2.2
+- holidays>=0.10.2
+- scipy>=1.0.0
+- seaborn>=0.8.1
+- scikit-learn>=0.19.1
+- jupyter>=1.0.0
+- pip>=19.2
+
+- pip:
+  - implicit==0.4.2
+  - tensorflow==1.15.2
+  - deepctr >=0.7.5
+
+  
