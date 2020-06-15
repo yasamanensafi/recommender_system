@@ -1,5 +1,6 @@
 # Hybrid Recommender Systems for Personalized Travel Destinations
 
+This project was conducted under the supervision of Amir Tavasoli at the Sharpesminds fellowship program. 
 ## Context
 Nowadays, online reservations have become very popular and travellers find it much easier to book hotels of their choice online. However, people have a difficult time choosing the hotel that they want to book. Therefore, the recommender system comes into play.
 
@@ -40,3 +41,48 @@ Then, we used EmbeddingDotBias which is provided by FastAI and it creates embedd
 In this model we could recommend hotel clusters to a user and also score the model to find the top K recommendations.
 
 ### **4.0-hotel-wideNdeep.ipynb**
+Wide & Deep is a hybrid model that joins trained wide linear models and deep neural networks to combine the benefits of memorization and generalization for recommender systems.
+
+![enter image description here](https://1.bp.blogspot.com/-Dw1mB9am1l8/V3MgtOzp3uI/AAAAAAAABGs/mP-3nZQCjWwdk6qCa5WraSpK8A7rSPj3ACLcB/s1600/image04.png)
+
+As the left side of the above figure shows, the wide network is a single layer feed-forward network which assigns weights to each feature and adds bias to them to model the matrix factorization method. The deep model is a feed forward neural network as shown in the above figure. The combined wide and deep model takes the weighted sum of the outputs from both wide model and deep model as the prediction value.
+In this notebook, we implemented the wide and deep model using [DeepCTR](https://pypi.org/project/deepctr/) package. After the features were divided into sparse (categorical) and dense (continuous) features, we applied Label Encoding for sparse features, and normalization for dense numerical features. Then, the model was defined and trained and its performance was evaluated using the most common metric systems: RMSE, MAE, and AUC.
+It should be mentioned that we found the best model attributes by performing a semi-manual hyper-parameter tuning.
+### **5.0-hotel-deepfm.ipynb**
+Compared to the latest Wide & Deep model from Google, DeepFM has a shared raw feature input to both its “wide” and “deep” components, with no need for feature engineering besides raw features. The wide component of DeepFM is an FM layer. The Deep Component of DeepFM can be any neural network.
+![enter image description here](https://deepctr-doc.readthedocs.io/en/latest/_images/DeepFM.png)
+In this notebook, same as the wide and deep notebook we divided features to sparse and dense, defined the model, trained it and also applied hyper-parameter tuning. 
+### **6.0-hotel-xdeepfm.ipynb**
+XDeepFM (eXtreme Deep Factorization Machine) uses a Compressed Interaction Network (CIN) to learn both low and high order feature interaction explicitly, and uses a classical DNN (MLP) to learn feature interaction implicitly. In each layer of CIN, first compute outer products between $x^k$ and $x_0$ to get a tensor $Z_{k+1}$,then use a 1DConv to learn feature maps $H_{k+1}$ on this tensor. Finally,apply sum pooling on all the feature maps $H_k$ to get one vector.The vector is used to compute the logit that CIN contributes.
+![enter image description here](https://deepctr-doc.readthedocs.io/en/latest/_images/xDeepFM.png)
+Also, in this notebook, same as the wide and deep and deepFM notebooks, we divided features to sparse and dense, defined the model, trained it and also applied hyper-parameter tuning. 
+
+### **7.0-hotel-similar_clusters.ipynb**
+
+After creating a collaborative-filtering recommender system as a baseline and developing three hybrid recommender systems, we decided to tackle a new problem and identify similar clusters (hotel types). 
+The Expedia hotel dataset is an anonymized dataset and 
+the true values of some features such as item_id (or previously hotel_cluster) are hidden behind integer codes. Inspired by [The locations puzzle kernel](https://www.kaggle.com/dvasyukova/the-locations-puzzle) we tried to identify the location of some of the hotels with the help of user location country, region, city and most importantly, orig_destination_distance which represents the distance between the hotel and the user. 
+After finding the location of some of the hotel_markets (New York. Las Vegas, Cancún, London, Miami, ...) and combing the results with the most common Accommodation Types in that city (that extracted from Expedia website), we can guess the hotel type of that cluster. For example, we know that hotel_market ID of Hawaii is 212. Also, we extracted from data that the most common hotel_cluster for Hawaii is 0. Therefore, considering the information that we gained from Expedia website, we assigned a name to hotel_cluster = 0 and we named it  "beach resort". 
+We took this finding further and after finding the top most similar clusters to 0, we assigned beach resorts to them too. 
+We applied this method to a few more clusters, came up with 10 categories such as apartment, business_hotels, bed_n_breakfast, and etc and covered more than 60 item_ids out of 100. 
+
+### **8.0-hotel-top_n_items_deepfm.ipynb**
+
+In the last notebook, after training one of our hybrid recommender system models (here we used DeepFM), we tried to find the similar clusters based on the results of DeepFM model and in order to do this we used implicit library. After that, we compared the results to the defined  clusters from the previous notebook, and checked if the there are similar. Fortunately, the results confirmed our assumptions.
+In the end, as an output, a csv file was generated that consists of item_id of the hotels and the three most similar clusters to them. It should be mentioned that for each item_id we excluded the recommended clusters that are in the same cluster category. For example, on the notebook 7, we assigned the category "apartment" to cluster number 5. In the list of the five most similar clusters to this one, we have  apartment, motel, apartment, casino_hotel, and private_vacation_homes. We chose to only recommend a motel, an apartment and a casino_hotel to the user. 
+Finally, we recommend 5 hotel clusters to each user. 
+
+## src/hotel_rec_sys
+
+This folder consists of several modules that have been created by dividing the program into different parts.
+The hyper-parameter tuning here is a semi-manual process. If you would like to find the optimal hyper-parameters for the model, after running the [run_tuning.py](https://github.com/yasamanensafi/recommender_system/blob/master/src/hotel_rec_sys/run_tuning.py "run_tuning.py"), you need to place the results to the model dictionary at [config.py](https://github.com/yasamanensafi/recommender_system/blob/master/src/hotel_rec_sys/config/config.py) file.
+By running the  [run.py](https://github.com/yasamanensafi/recommender_system/blob/master/src/hotel_rec_sys/run.py) the program will 
+- Load the datasets
+- Perform pre-processing
+- Perform feature engineering
+- Split the data into trainset and testset
+- Create Wide and Deep, DeepFM, and XDeepFM models.
+- Score each model and choose the best one.
+- Load the best model
+- Find the 3 most similar clusters to each item_id based on the prediction of the model
+- Generate output.csv
