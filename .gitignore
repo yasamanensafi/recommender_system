@@ -1,7 +1,6 @@
 .DS_Store
 __pycache__/
 *.csv
-*.pdf
 *.h5
 *.ipynb_checkpoints
 *.pyc
