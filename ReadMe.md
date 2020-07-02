@@ -103,7 +103,7 @@ It should be mentioned that for each item_id the recommended clusters that are i
 Finally, 5 hotel clusters were recommended to each user. The following table, shows the recommendation for user_id=800. 
 
 | item_id (hotel_cluster) |Hotel Type |
-| :---         |       :---:      |    ---: |    
+| :---         |     ---: |    
 | 39 | bed_n_breakfast   | 
 | 65 | hotel_resort  | 
 | 77| private_vacation_homes  |
